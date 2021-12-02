@@ -16,13 +16,14 @@ import java.util.ArrayList;
 
 public class addImage extends AppCompatActivity {
 
-    private Spinner spinner1;
+    private Spinner spinner1,spinner2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_image);
         spinner1 = (Spinner) findViewById(R.id.spinner1);
+        spinner2 = (Spinner) findViewById(R.id.spinner2);
         consultaLugar();
     }
 
@@ -58,11 +59,12 @@ public class addImage extends AppCompatActivity {
         catch (Exception e) {
             e.printStackTrace();
         }
-        llenarSpinner(lista);
+        llenarSpinner(lista,spinner1);
+        llenarSpinner(lista,spinner2);
     }
 
-    private void llenarSpinner(ArrayList<String> lista) {
+    private void llenarSpinner(ArrayList<String> lista, Spinner spn) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,lista);
-        spinner1.setAdapter(adapter);
+        spn.setAdapter(adapter);
     }
 }
