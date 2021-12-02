@@ -1,10 +1,15 @@
 package com.example.virtual_itl;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -17,6 +22,7 @@ import java.util.ArrayList;
 public class addImage extends AppCompatActivity {
 
     private Spinner spinner1,spinner2;
+    ImageView imagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +31,8 @@ public class addImage extends AppCompatActivity {
         spinner1 = (Spinner) findViewById(R.id.spinner1);
         spinner2 = (Spinner) findViewById(R.id.spinner2);
         consultaLugar();
+
+        imagen = (ImageView) findViewById(R.id.imageView);
     }
 
     public Connection conexion(){
@@ -66,5 +74,24 @@ public class addImage extends AppCompatActivity {
     private void llenarSpinner(ArrayList<String> lista, Spinner spn) {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_dropdown_item_1line,lista);
         spn.setAdapter(adapter);
+    }
+
+    public void onclick (View view){
+        cargarImagen();
+    }
+
+    private void cargarImagen(){
+        Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        intent.setType("image/");
+        startActivityForResult(intent.createChooser(intent,"Seleccione la Aplicacion"),10);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==RESULT_OK){
+            Uri path = data.getData();
+            imagen.setImageURI(path);
+        }
     }
 }

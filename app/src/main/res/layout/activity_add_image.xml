@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".addImage">
 
+
     <TextView
         android:id="@+id/lugar1"
         android:layout_width="wrap_content"
@@ -36,7 +37,6 @@
         android:id="@+id/spinner1"
         android:layout_width="214dp"
         android:layout_height="24dp"
-        android:layout_marginStart="120dp"
         android:layout_marginTop="40dp"
         android:spinnerMode="dropdown"
         app:layout_constraintStart_toEndOf="@+id/lugar1"
@@ -50,4 +50,27 @@
         android:spinnerMode="dropdown"
         app:layout_constraintStart_toEndOf="@+id/lugar"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/botonImagen"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="100dp"
+        android:text="Cargar Imagen"
+        android:onClick="onclick"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="366dp"
+        android:layout_height="391dp"
+        android:layout_marginTop="65dp"
+        android:layout_marginEnd="24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/botonImagen"
+        app:layout_constraintTop_toBottomOf="@+id/spinner2"
+        app:srcCompat="@drawable/camara" />
 </androidx.constraintlayout.widget.ConstraintLayout>
