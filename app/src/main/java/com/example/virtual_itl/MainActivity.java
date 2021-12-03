@@ -21,7 +21,7 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
 
-    Button boton;
+    Button boton,boton2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +34,11 @@ public class MainActivity extends AppCompatActivity {
         boton = (Button) findViewById(R.id.button_first);
         boton.setOnClickListener((v) -> {
             startActivity(new Intent(MainActivity.this,addImage.class));
+        });
+
+        boton2 = (Button) findViewById(R.id.button_first2);
+        boton2.setOnClickListener((v) -> {
+            startActivity(new Intent(MainActivity.this,ActivityRuta.class));
         });
 
         FloatingActionButton fab = findViewById(R.id.fab);
