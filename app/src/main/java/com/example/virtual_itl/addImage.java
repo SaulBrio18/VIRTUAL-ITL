@@ -114,63 +114,62 @@ public class addImage extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "El lugar de origen y el lugar de destino no puede ser el mismo", Toast.LENGTH_SHORT).show();
         } else {
             try {
-                String SQL = "SELECT TOP 1 Ruta.ID_Ruta FROM Ruta INNER JOIN Lugar ON Ruta.ID_Lugar1 = Lugar.ID_Lugar WHERE Lugar.nombre_I like ? OR Lugar.nombre_I like ? ";
+                String SQL = "SELECT TOP 1 Ruta.ID_Ilustracion FROM Ruta INNER JOIN Lugar AS Lugar ON Ruta.ID_Lugar1 = Lugar.ID_Lugar OR Ruta.ID_Lugar2 = Lugar.ID_Lugar INNER JOIN Lugar AS Lugar2 ON Ruta.ID_Lugar2 = Lugar2.ID_Lugar OR Ruta.ID_Lugar1 = Lugar2.ID_Lugar WHERE (Lugar.nombre_I like ? AND Lugar2.nombre_I like ?) OR (Lugar2.nombre_I like ? AND Lugar.nombre_I like ?)";
 
                 PreparedStatement stmt = null;
                 stmt = conexion().prepareStatement(SQL);
                 stmt.setString(1, lugar1);
                 stmt.setString(2, lugar2);
+                stmt.setString(3, lugar2);
+                stmt.setString(4, lugar1);
 
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) { //Si ya hay un registro entonces se actualiza
-                    Toast.makeText(getApplicationContext(), "Entonces se actualiza", Toast.LENGTH_SHORT).show();
+                    String insert = "UPDATE Ilustracion SET nombre_I = ? WHERE ID_Ilustracion = ?";
+                    stmt = conexion().prepareStatement(insert);
+                    stmt.setString(1, lugar1+"-"+lugar2);
+                    stmt.setString(2, rs.getString("ID_Ilustracion"));
+                    stmt.executeUpdate();
+                    Toast.makeText(getApplicationContext(), "Proceso terminado", Toast.LENGTH_SHORT).show();
                 } else { //Si no hay un registro entonces insertamos uno nuevo
                     //insertamos la imagen en su tabla
                     String insert = "INSERT INTO Ilustracion(nombre_I) VALUES(?)";
-                    stmt = conexion().prepareStatement(insert,PreparedStatement.RETURN_GENERATED_KEYS);
+                    stmt = conexion().prepareStatement(insert);
                     stmt.setString(1, lugar1+"-"+lugar2);
                     stmt.execute();
 
-                    Toast.makeText(getApplicationContext(), "llega aqui", Toast.LENGTH_SHORT).show();
-
-                    rs = stmt.getGeneratedKeys();
+                    //Consutamos el id de la imagen
+                    String sql_img = "SELECT MAX(ID_Ilustracion) AS ID_Ilustracion FROM Ilustracion WHERE nombre_I like ? ";
+                    stmt = conexion().prepareStatement(sql_img);
+                    stmt.setString(1, lugar1+"-"+lugar2);
+                    rs = stmt.executeQuery();
 
                     rs.next();
                     int idImg = rs.getInt("ID_Ilustracion");
 
-                    //Consutamos el id de la imagen
-//                    String sql_img = "SELECT MAX(ID_Ilustracion) AS ID_Ilustracion FROM Ilustracion WHERE nombre_I like ? ";
-//                    stmt = conexion().prepareStatement(sql_img);
-//                    stmt.setString(1, lugar1+"-"+lugar2);
-//                    rs = stmt.executeQuery();
-//
-//                    rs.next();
-//                    String idImg = rs.getString("ID_Ilustracion");
-
-
-/*
                     //Consutamos los ids de los lugares seleccionados
                     String sql_lugares = "SELECT ID_Lugar FROM Lugar WHERE nombre_I like ? OR nombre_I like ?";
                     stmt = conexion().prepareStatement(sql_lugares);
                     stmt.setString(1, lugar1);
                     stmt.setString(2, lugar2);
                     rs = stmt.executeQuery();
-
-                    rs.next();
-                    int idLugar1 = rs.getInt("ID_Lugar");
-                    rs.next();
-                    int idLugar2 = rs.getInt("ID_Lugar");
-
-                    Toast.makeText(getApplicationContext(), idLugar1+"-"+idLugar2+"-"+idImg, Toast.LENGTH_SHORT).show();
-*/
-                    /*
+                    int [] ids = new int[3];
+                    int aux = 0;
+                    String a = "";
+                    while (rs.next()) {
+                       ids[++aux] = rs.getInt("ID_Lugar");
+                    }
+                    Toast.makeText(getApplicationContext(), "Proceso terminado", Toast.LENGTH_SHORT).show();
                     //Ahora insertamos la relacion de los dos lugares en su tabla
                     insert = "INSERT INTO Ruta(ID_Lugar1,ID_Lugar2,ID_Ilustracion) VALUES(?,?,?)";
                     stmt = conexion().prepareStatement(insert);
-                    stmt.setInt(1, idLugar1);
-                    stmt.setInt(2, idLugar2);
+                    stmt.setInt(1, ids[1]);
+                    stmt.setInt(2, ids[2]);
                     stmt.setInt(3, idImg);
                     stmt.execute();
+
+                    /*
+
                     Toast.makeText(getApplicationContext(), "insert ruta", Toast.LENGTH_SHORT).show();
                     */
                 }
