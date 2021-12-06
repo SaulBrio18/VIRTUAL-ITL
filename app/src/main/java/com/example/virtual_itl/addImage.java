@@ -101,11 +101,10 @@ public class addImage extends AppCompatActivity {
     }
 
     public void escuchaSpinner(View view) {
-        enviarImagen();
+        enviarDatos();
     }
 
-    private void enviarImagen() {
-//        String imagen = convertirImgToString(bitmap);
+    private void enviarDatos() {
         String
                 lugar1 = spinner1.getSelectedItem().toString(),
                 lugar2 = spinner2.getSelectedItem().toString();
@@ -114,6 +113,8 @@ public class addImage extends AppCompatActivity {
             Toast.makeText(getApplicationContext(), "El lugar de origen y el lugar de destino no puede ser el mismo", Toast.LENGTH_SHORT).show();
         } else {
             try {
+                byte[] bimagen = convertirImgToString(bitmap);
+
                 String SQL = "SELECT TOP 1 Ruta.ID_Ilustracion FROM Ruta INNER JOIN Lugar AS Lugar ON Ruta.ID_Lugar1 = Lugar.ID_Lugar OR Ruta.ID_Lugar2 = Lugar.ID_Lugar INNER JOIN Lugar AS Lugar2 ON Ruta.ID_Lugar2 = Lugar2.ID_Lugar OR Ruta.ID_Lugar1 = Lugar2.ID_Lugar WHERE (Lugar.nombre_I like ? AND Lugar2.nombre_I like ?) OR (Lugar2.nombre_I like ? AND Lugar.nombre_I like ?)";
 
                 PreparedStatement stmt = null;
@@ -125,17 +126,19 @@ public class addImage extends AppCompatActivity {
 
                 ResultSet rs = stmt.executeQuery();
                 if (rs.next()) { //Si ya hay un registro entonces se actualiza
-                    String insert = "UPDATE Ilustracion SET nombre_I = ? WHERE ID_Ilustracion = ?";
+                    String insert = "UPDATE Ilustracion SET nombre_I = ?, Imagen = ? WHERE ID_Ilustracion = ?";
                     stmt = conexion().prepareStatement(insert);
                     stmt.setString(1, lugar1+"-"+lugar2);
-                    stmt.setString(2, rs.getString("ID_Ilustracion"));
+                    stmt.setBytes(2, bimagen);
+                    stmt.setString(3, rs.getString("ID_Ilustracion"));
                     stmt.executeUpdate();
                     Toast.makeText(getApplicationContext(), "Proceso terminado", Toast.LENGTH_SHORT).show();
                 } else { //Si no hay un registro entonces insertamos uno nuevo
                     //insertamos la imagen en su tabla
-                    String insert = "INSERT INTO Ilustracion(nombre_I) VALUES(?)";
+                    String insert = "INSERT INTO Ilustracion(nombre_I, Imagen) VALUES(?,?)";
                     stmt = conexion().prepareStatement(insert);
                     stmt.setString(1, lugar1+"-"+lugar2);
+                    stmt.setBytes(2, bimagen);
                     stmt.execute();
 
                     //Consutamos el id de la imagen
@@ -159,7 +162,6 @@ public class addImage extends AppCompatActivity {
                     while (rs.next()) {
                        ids[++aux] = rs.getInt("ID_Lugar");
                     }
-                    Toast.makeText(getApplicationContext(), "Proceso terminado", Toast.LENGTH_SHORT).show();
                     //Ahora insertamos la relacion de los dos lugares en su tabla
                     insert = "INSERT INTO Ruta(ID_Lugar1,ID_Lugar2,ID_Ilustracion) VALUES(?,?,?)";
                     stmt = conexion().prepareStatement(insert);
@@ -168,10 +170,7 @@ public class addImage extends AppCompatActivity {
                     stmt.setInt(3, idImg);
                     stmt.execute();
 
-                    /*
-
-                    Toast.makeText(getApplicationContext(), "insert ruta", Toast.LENGTH_SHORT).show();
-                    */
+                    Toast.makeText(getApplicationContext(), "Proceso terminado", Toast.LENGTH_SHORT).show();
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -179,16 +178,14 @@ public class addImage extends AppCompatActivity {
         }
     }
 
-    private String convertirImgToString(Bitmap bitmap) {
+    private byte[] convertirImgToString(Bitmap bitmap) {
         ByteArrayOutputStream array = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, array);
         byte[] imgByte = array.toByteArray();
-        //String imagen = Base64.encodeToString(imgByte,Base64.DEFAULT);
-        String retIMG = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-            retIMG = Base64.getEncoder().encodeToString(imgByte);
-        }
-        return retIMG;
+//        String imagen = Base64.encodeToString(imgByte,Base64.DEFAULT);
+//        String retIMG = null;
+//            retIMG = Base64.getEncoder().encodeToString(imgByte);
+        return imgByte;
     }
 
     public void onclick(View view) {

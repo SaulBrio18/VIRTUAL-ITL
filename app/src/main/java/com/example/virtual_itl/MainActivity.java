@@ -21,7 +21,7 @@ import android.widget.ImageView;
 public class MainActivity extends AppCompatActivity {
 
 
-    Button boton,boton2;
+    Button boton,boton2,boton3;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,13 +41,9 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this,ActivityRuta.class));
         });
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
+        boton3 = (Button) findViewById(R.id.button3);
+        boton3.setOnClickListener((v) -> {
+            startActivity(new Intent(MainActivity.this,add_image2.class));
         });
     }
 

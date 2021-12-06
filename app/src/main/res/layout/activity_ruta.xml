@@ -93,6 +93,14 @@
                     android:text="TextView"
                     tools:layout_editor_absoluteX="40dp" />
 
+                <Button
+                    android:id="@+id/boton_mostrar"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Mostrar"
+                    android:onClick="click_boton"
+                    tools:text="Mostrar" />
+
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
