@@ -32,8 +32,8 @@
             <Spinner
                 android:id="@+id/spinner1"
                 android:layout_width="214dp"
-                android:layout_height="24dp"
-                 android:spinnerMode="dropdown" />
+                android:layout_height="39dp"
+                android:spinnerMode="dropdown" />
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"

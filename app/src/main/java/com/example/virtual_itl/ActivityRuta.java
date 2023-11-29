@@ -2,6 +2,7 @@ package com.example.virtual_itl;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -44,7 +45,30 @@ public class ActivityRuta extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
     }
 
-    public Connection conexion(){
+    public Connection conexion() {
+        Connection con = null;
+
+        try {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            // Utiliza el driver de Microsoft SQL Server
+            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+            // Reemplaza los valores con la información de tu base de datos en Azure
+            String url = "jdbc:sqlserver://johanbriones-itl-app.database.windows.net:1433;database=VIRTUAL-ITL";
+            String user = "itl-admin";
+            String password = "Candado-99";
+
+            con = DriverManager.getConnection(url, user, password);
+        } catch (Exception e) {
+            // Muestra un mensaje de error en caso de fallo
+            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        return con;
+    }
+
+    /*public Connection conexion(){
         Connection con = null;
 
         try {
@@ -52,12 +76,12 @@ public class ActivityRuta extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
             Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
             //con = DriverManager.getConnection("jdbc:jtds:sqlserver://DESKTOP-LKJB0LG;databaseName=VIRTUAL-ITL;user=sa;password=Nalgamessi01;");
-            con = DriverManager.getConnection("jdbc:jtds:sqlserver://192.168.1.104;databaseName=VIRTUAL-ITL;user=sa;password=Nalgamessi01;");
+            con = DriverManager.getConnection("jdbc:jtds:sqlserver://192.168.1.65;databaseName=VIRTUAL-ITL;user=sa;password=Nalgamessi01;");
         }catch(Exception e){
             Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
         return con;
-    }
+    }*/
 
     private void consultaLugar(){
         ArrayList<String> lista = new ArrayList<String>();
