@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.virual_itl.R;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.sql.Connection;

@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.virual_itl.R;
+
 
 public class Login extends AppCompatActivity {
 

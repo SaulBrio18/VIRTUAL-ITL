@@ -14,6 +14,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.virual_itl.R;
+
 import java.io.ByteArrayOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -45,7 +47,7 @@ public class ActivityRuta extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
     }
 
-    public Connection conexion() {
+   /*public Connection conexion() {
         Connection con = null;
 
         try {
@@ -53,22 +55,21 @@ public class ActivityRuta extends AppCompatActivity {
             StrictMode.setThreadPolicy(policy);
 
             // Utiliza el driver de Microsoft SQL Server
-            Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+            Class.forName("net.sourceforge.jtds.jdbc.Driver").newInstance();
 
             // Reemplaza los valores con la información de tu base de datos en Azure
-            String url = "jdbc:sqlserver://johanbriones-itl-app.database.windows.net:1433;database=VIRTUAL-ITL";
-            String user = "itl-admin";
-            String password = "Candado-99";
+            String url = "jdbc:jtds:sqlserver://johanbriones-itl-app.database.windows.net:1433;database=VIRTUAL-ITL;user=itl-admin@johanbriones-itl-app;password=Candado-99;encrypt=true;trustServerCertificate=false;hostNameInCertificate=*.database.windows.net;loginTimeout=30;";
 
-            con = DriverManager.getConnection(url, user, password);
+
+            con = DriverManager.getConnection(url);
         } catch (Exception e) {
             // Muestra un mensaje de error en caso de fallo
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
         }
         return con;
-    }
+    }*/
 
-    /*public Connection conexion(){
+    public Connection conexion(){
         Connection con = null;
 
         try {
@@ -81,7 +82,7 @@ public class ActivityRuta extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
         }
         return con;
-    }*/
+    }
 
     private void consultaLugar(){
         ArrayList<String> lista = new ArrayList<String>();
